@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 add_subdirectory(external/glad ${CMAKE_CURRENT_BINARY_DIR}/glad)
-add_subdirectory(external/glfw ${CMAKE_CURRENT_BINARY_DIR}/glfw)
+add_subdirectory(external/imgui ${CMAKE_CURRENT_BINARY_DIR}/imgui)
 
 
 set(SP_SRC cxx/Main.cxx)
@@ -27,6 +27,8 @@ endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} 
     PRIVATE glad
-    PRIVATE glfw 
+    PRIVATE glfw
+    PRIVATE imgui_core
+    PRIVATE glfw_opengl3
     ${OPENGL_LIBRARIES}
 )
