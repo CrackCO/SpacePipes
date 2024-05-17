@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-add_subdirectory(src/glad ${CMAKE_CURRENT_BINARY_DIR}/glad)
-add_subdirectory(src/glfw ${CMAKE_CURRENT_BINARY_DIR}/glfw)
+add_subdirectory(external/glad ${CMAKE_CURRENT_BINARY_DIR}/glad)
+add_subdirectory(external/glfw ${CMAKE_CURRENT_BINARY_DIR}/glfw)
 
 
 set(SP_SRC cxx/Main.cxx)
@@ -15,8 +15,8 @@ set(SP_SRC cxx/Main.cxx)
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 
 target_include_directories(${CMAKE_PROJECT_NAME} 
-    PRIVATE src/glad/include
-    PRIVATE src/glfw/include
+    PRIVATE external/glad/include
+    PRIVATE external/glfw/include
 )
 
 if (WIN32)
