@@ -5,11 +5,28 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SP_SRC  cxx/Main.cxx
-            cxx/Glad.cxx)
+
+add_subdirectory(src/glad ${CMAKE_CURRENT_BINARY_DIR}/glad)
+add_subdirectory(src/glfw ${CMAKE_CURRENT_BINARY_DIR}/glfw)
+
+
+set(SP_SRC cxx/Main.cxx)
 
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE src/glad/include)
+target_include_directories(${CMAKE_PROJECT_NAME} 
+    PRIVATE src/glad/include
+    PRIVATE src/glfw/include
+)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE opengl32)
+if (WIN32)
+    set(OPENGL_LIBRARIES PRIVATE opengl32)
+elseif (UNIX)
+    set(OPENGL_LIBRARIES PRIVATE GL)
+endif()
+
+target_link_libraries(${CMAKE_PROJECT_NAME} 
+    PRIVATE glad
+    PRIVATE glfw 
+    ${OPENGL_LIBRARIES}
+)

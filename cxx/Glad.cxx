@@ -1,1 +1,0 @@
-#include "../src/glad/src/glad.c"
