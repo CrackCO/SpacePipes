@@ -17,6 +17,7 @@ add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 target_include_directories(${CMAKE_PROJECT_NAME} 
     PRIVATE external/glad/include
     PRIVATE external/glfw/include
+    PRIVATE external/imgui
 )
 
 if (WIN32)
