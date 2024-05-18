@@ -18,6 +18,7 @@ target_include_directories(${CMAKE_PROJECT_NAME}
     PRIVATE external/glad/include
     PRIVATE external/glfw/include
     PRIVATE external/imgui
+    PRIVATE external/glm
 )
 
 if (WIN32)

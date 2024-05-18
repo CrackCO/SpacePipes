@@ -2,9 +2,10 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include <imgui.h>
+#include <glm/vec4.hpp>
 
 #include <iostream>
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -28,6 +29,9 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+    glm::vec4 vec4Test = { 0.0f, 0.0f, 0.0f, 0.0f };
+    std::cout << "[GLM OK]\n";
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
