@@ -1,5 +1,8 @@
 #include "Camera.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+
+
 Camera::Camera(
     const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& up, 
     float fov, float aspect, float nearPlane, float farPlane
@@ -18,7 +21,7 @@ Camera::Camera(
     updateProjectionMatrix();
 }
 
-~Camera() {}
+Camera::~Camera() {}
 
 
 glm::vec3 Camera::getPos        () const { return pos;        }

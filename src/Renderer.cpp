@@ -12,6 +12,7 @@ static void glCheckError(const char* operation) {
     }
 }
 
+
 Renderer::Renderer(GLFWwindow* window, const World& world, const Camera& camera)
     :
     window(window),
@@ -57,7 +58,7 @@ void Renderer::compileShaders()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    std::cout << "compiling complete successfully\n";
+    std::cout << "shaders compiling complete successfully\n";
 }
 
 void Renderer::render()
@@ -69,7 +70,7 @@ void Renderer::render()
     glCheckError("glGenBuffers");
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glCheckError("glBindBuffer");
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
     glCheckError("glBufferData");
 
     glUseProgram(shaderProgram);
@@ -80,6 +81,12 @@ void Renderer::render()
     GLint cameraDirLoc = glGetUniformLocation(shaderProgram, "cameraDir");
     glUniform3fv(cameraDirLoc, 1, &(camera.getDir())[0]);
 
+    GLint viewMatrixLoc = glGetUniformLocation(shaderProgram, "viewMatrix");
+    glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, &camera.getViewMatrix()[0][0]);
+
+    GLint projectionMatrixLoc = glGetUniformLocation(shaderProgram, "projectionMatrix");
+    glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, &camera.getProjectionMatrix()[0][0]);
+
     GLint positionLoc = glGetAttribLocation(shaderProgram, "position");
     glEnableVertexAttribArray(positionLoc);
     glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
@@ -87,6 +94,7 @@ void Renderer::render()
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
     glDisableVertexAttribArray(positionLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

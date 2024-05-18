@@ -56,11 +56,22 @@ int main()
     }
 
 
-    Renderer renderer(window, World(), Camera(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+    Camera camera(
+        glm::vec3(0.0f, 0.0f, 3.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        45.0f,
+        800.0f / 600.0f,
+        0.1f,
+        100.0f
+    );
+
+    Renderer renderer(window, World(), camera);
+    renderer.render();
 
     while (!glfwWindowShouldClose(window))
     {
-        renderer.render();
+        
     }
 
 
