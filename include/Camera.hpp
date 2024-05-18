@@ -16,17 +16,17 @@ private:
     glm::mat4 projectionMatrix;
 
 public:
-    Camera::Camera(
+    Camera(
         const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& up, 
         float fov, float aspect, float nearPlane, float farPlane
     );
 
     ~Camera();
 
-    glm::vec3 getPos    () const;
-    glm::vec3 getDir    () const;
-    glm::vec3 getUp     () const;
-    glm::mat4 getMatrix () const;
+    glm::vec3 getPos        () const;
+    glm::vec3 getDir        () const;
+    glm::vec3 getUp         () const;
+    glm::mat4 getViewMatrix () const;
 
 
     float     getFov              () const;

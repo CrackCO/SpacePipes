@@ -21,10 +21,10 @@ Camera::Camera(
 ~Camera() {}
 
 
-glm::vec3 Camera::getPos   () const { return pos;        }
-glm::vec3 Camera::getDir   () const { return dir;        }
-glm::vec3 Camera::getUp    () const { return up;         }
-glm::mat4 Camera::getMatrix() const { return viewMatrix; }
+glm::vec3 Camera::getPos        () const { return pos;        }
+glm::vec3 Camera::getDir        () const { return dir;        }
+glm::vec3 Camera::getUp         () const { return up;         }
+glm::mat4 Camera::getViewMatrix () const { return viewMatrix; }
 
 void Camera::setPos ( const glm::vec3& newPos ) { pos = newPos; updateViewMatrix(); }
 void Camera::setDir ( const glm::vec3& newDir ) { dir = newDir; updateViewMatrix(); }
