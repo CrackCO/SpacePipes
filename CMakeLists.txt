@@ -14,7 +14,11 @@ set(SP_SRC
     src/main.cpp
     src/World.cpp
     src/Camera.cpp
+    
     src/Renderer.cpp
+    src/Shader.cpp
+    src/vertShader.cpp
+    src/fragShader.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})

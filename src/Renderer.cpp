@@ -1,123 +1,22 @@
 #include "Renderer.hpp"
 
-#include "iostream"
-#include <cstdlib>
-#include <GL/glu.h>
-#include <glm/gtc/type_ptr.hpp>
-
-
-static void glCheckError(const char* operation) {
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        std::cerr << "OpenGL error during " << operation << ": " << gluErrorString(error) << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
-
+#include "Shader.hpp"
 
 Renderer::Renderer(GLFWwindow* window, const World& world, const Camera& camera)
     :
     window(window),
     VAO(0), VBO(0), EBO(0),
-    shaderProgram(0),
+    shader(),
     world(world),
     camera(camera)
 {
-    initShaders();
+    shader.compile();
     initMesh();
 }
 
 Renderer::~Renderer()
 {
     cleanup();
-}
-
-GLuint Renderer::compileShader(GLuint type, const char* src)
-{
-    GLuint shader = glCreateShader(type); glCheckError("glCreateShader");
-    glShaderSource(shader, 1, &src, nullptr); glCheckError("glShaderSource");
-
-    glCompileShader(shader);                  glCheckError("glCompileShader");
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Shader compilation failed: " << infoLog << std::endl;
-    }
-
-    return shader;
-}
-
-
-void Renderer::initShaders()
-{
-    const char* vertShaderSrc = R"(
-        #version 330 core
-
-        in vec3 position;
-
-        uniform vec3 cameraPos;
-        uniform vec3 cameraDir;
-
-        uniform mat4 viewMatrix;
-        uniform mat4 projectionMatrix;
-
-        uniform float time;
-
-        out float diffuse;
-
-        void main() {
-            float angle = time * 2.0 * 3.14159;
-
-            mat4 rotationMatrix = mat4(
-                vec4(cos(angle), 0.0, sin(angle), 0.0),
-                vec4(0.0, 1.0, 0.0, 0.0),
-                vec4(-sin(angle), 0.0, cos(angle), 0.0),
-                vec4(0.0, 0.0, 0.0, 1.0)
-            );
-
-            vec4 rotatedPosition = rotationMatrix * vec4(position, 1.0);
-            vec4 viewPos = viewMatrix * rotatedPosition;
-            vec3 viewDir = normalize(viewPos.xyz - cameraPos);
-            diffuse = max(0.0, dot(viewDir, cameraDir));
-            gl_Position = projectionMatrix * viewPos;
-        }
-    )";
-
-    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertShaderSrc);
-
-
-    
-    const char* fragShaderSrc = R"(
-        #version 330 core
-
-        out vec4 FragColor;
-
-        in float diffuse;
-
-        void main() {
-            FragColor = vec4(diffuse, diffuse, diffuse, 1.0);
-        }
-    )";
-    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragShaderSrc);
-
-
-    shaderProgram = glCreateProgram();             glCheckError("glCreateShaderProgram");
-    glAttachShader(shaderProgram, vertexShader);   glCheckError("glAttachVertexShader");
-    glAttachShader(shaderProgram, fragmentShader); glCheckError("glAttachFragmentShader");
-
-    glLinkProgram(shaderProgram);                  glCheckError("glLinkShaderProgram");
-    GLint success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        char infoLog[512];
-        glGetShaderInfoLog(shaderProgram, 512, nullptr, infoLog);
-        std::cerr << "Shader program linking failed: " << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
 }
 
 
@@ -176,28 +75,24 @@ void Renderer::render() {
     // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(shaderProgram);
+    shader.bind();
 
-    glUniform3fv       (glGetUniformLocation( shaderProgram, "cameraPos"        ), 1,           glm::value_ptr( camera.getPos              ()));
-    glUniform3fv       (glGetUniformLocation( shaderProgram, "cameraDir"        ), 1,           glm::value_ptr( camera.getDir              ()));
-    glUniformMatrix4fv (glGetUniformLocation( shaderProgram, "viewMatrix"       ), 1, GL_FALSE, glm::value_ptr( camera.getViewMatrix       ()));
-    glUniformMatrix4fv (glGetUniformLocation( shaderProgram, "projectionMatrix" ), 1, GL_FALSE, glm::value_ptr( camera.getProjectionMatrix ()));
-    
-    glUniform1f(glGetUniformLocation(shaderProgram, "time"), glfwGetTime() / 4.0f);
-
+    shader.setVec3( "cameraPos",        camera.getPos              ());
+    shader.setVec3( "cameraDir",        camera.getDir              ());
+    shader.setMat4( "viewMatrix",       camera.getViewMatrix       ());
+    shader.setMat4( "projectionMatrix", camera.getProjectionMatrix ());
+    shader.setFloat("time", glfwGetTime() / 4.0f);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     glfwSwapBuffers(window);
-
 }
 
 void Renderer::cleanup() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
     glfwDestroyWindow(window);
     glfwTerminate();
 }
