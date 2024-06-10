@@ -20,7 +20,6 @@ set(SP_SRC
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 
 target_include_directories(${CMAKE_PROJECT_NAME} 
-    PRIVATE include
     PRIVATE external/glad/include
     PRIVATE external/glfw/include
     PRIVATE external/imgui
