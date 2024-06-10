@@ -21,9 +21,6 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
-    glm::vec4 vec4Test = { 0.0f, 0.0f, 0.0f, 0.0f };
-    std::cout << "[GLM OK]\n";
-
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -66,12 +63,15 @@ int main()
         100.0f
     );
 
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     Renderer renderer(window, World(), camera);
-    renderer.render();
 
     while (!glfwWindowShouldClose(window))
     {
-        
+        renderer.render();
     }
 
 

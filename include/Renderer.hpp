@@ -10,17 +10,23 @@
 class Renderer {
 private:
     GLFWwindow* window;
+    GLuint VAO, VBO, EBO;
+    GLuint shaderProgram;
+
     const World& world;
     const Camera& camera;
-    GLuint shaderProgram;
 
 public:
     Renderer(GLFWwindow* window, const World& world, const Camera& camera);
     ~Renderer();
 
 private:
-    void compileShaders();
+    GLuint compileShader(GLuint type, const char* src);
+    void initShaders();
+    void initMesh();
+    void cleanup();
 
 public:
     void render();
+
 };
