@@ -11,10 +11,10 @@ add_subdirectory(external/imgui ${CMAKE_CURRENT_BINARY_DIR}/imgui)
 
 
 set(SP_SRC 
-    cxx/Main.cxx
-    cxx/Renderer.cxx
-    cxx/World.cxx
-    cxx/Camera.cxx
+    src/main.cpp
+    src/World.cpp
+    src/Camera.cpp
+    src/Renderer.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
