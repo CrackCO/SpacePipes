@@ -14,6 +14,7 @@ set(SP_SRC
     src/main.cpp
     src/World.cpp
     src/Camera.cpp
+    src/Window.cpp
     
     src/Renderer.cpp
     src/Shader.cpp

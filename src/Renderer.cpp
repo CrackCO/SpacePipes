@@ -72,9 +72,6 @@ void Renderer::initMesh() {
 void Renderer::render() {
     glfwPollEvents();
 
-    // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    // glClear(GL_COLOR_BUFFER_BIT);
-
     shader.bind();
 
     shader.setVec3( "cameraPos",        camera.getPos              ());
@@ -86,8 +83,6 @@ void Renderer::render() {
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-
-    glfwSwapBuffers(window);
 }
 
 void Renderer::cleanup() {
