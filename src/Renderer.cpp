@@ -78,7 +78,7 @@ void Renderer::render() {
     shader.setVec3( "cameraDir",        camera.getDir              ());
     shader.setMat4( "viewMatrix",       camera.getViewMatrix       ());
     shader.setMat4( "projectionMatrix", camera.getProjectionMatrix ());
-    shader.setFloat("time", glfwGetTime() / 4.0f);
+    shader.setFloat("time", 0.0f); //glfwGetTime() / 16.0f);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);

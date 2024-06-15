@@ -28,7 +28,7 @@ const char* Shader::vertSrc = R"(
         vec4 rotatedPosition = rotationMatrix * vec4(position, 1.0);
         vec4 viewPos = viewMatrix * rotatedPosition;
         vec3 viewDir = normalize(viewPos.xyz - cameraPos);
-        diffuse = max(0.0, dot(viewDir, cameraDir));
+        diffuse = 1.0;
         gl_Position = projectionMatrix * viewPos;
     }
 )";
