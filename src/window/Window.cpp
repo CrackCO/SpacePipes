@@ -1,8 +1,8 @@
 #include "Window.hpp"
 
-#include "Renderer.hpp"
-#include "World.hpp"
-#include "Camera.hpp"
+#include "renderer/Renderer.hpp"
+#include "scene/World.hpp"
+#include "scene/Camera.hpp"
 
 bool leftMouseButtonPressed = false;
 bool newMove = false;

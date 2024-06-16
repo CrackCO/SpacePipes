@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "World.hpp"
-#include "Camera.hpp"
-#include "Shader.hpp"
+#include "scene/World.hpp"
+#include "scene/Camera.hpp"
+#include "shader/Shader.hpp"
 
 class Renderer {
 private:

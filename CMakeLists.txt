@@ -12,19 +12,21 @@ add_subdirectory(external/imgui ${CMAKE_CURRENT_BINARY_DIR}/imgui)
 
 set(SP_SRC 
     src/main.cpp
-    src/World.cpp
-    src/Camera.cpp
-    src/Window.cpp
+    src/scene/World.cpp
+    src/scene/Camera.cpp
+
+    src/window/Window.cpp
     
-    src/Renderer.cpp
-    src/Shader.cpp
-    src/vertShader.cpp
-    src/fragShader.cpp
+    src/renderer/Renderer.cpp
+    src/renderer/shader/Shader.cpp
+    src/renderer/shader/src/vertShader.cpp
+    src/renderer/shader/src/fragShader.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 
 target_include_directories(${CMAKE_PROJECT_NAME} 
+    PRIVATE src
     PRIVATE external/glad/include
     PRIVATE external/glfw/include
     PRIVATE external/imgui

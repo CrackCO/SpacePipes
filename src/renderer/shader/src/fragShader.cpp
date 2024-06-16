@@ -1,4 +1,4 @@
-#include "Shader.hpp"
+#include "renderer/shader/Shader.hpp"
 
 const char* Shader::fragSrc = R"(
     #version 330 core

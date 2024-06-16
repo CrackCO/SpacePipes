@@ -1,6 +1,6 @@
 #include "Renderer.hpp"
 
-#include "Shader.hpp"
+#include "shader/Shader.hpp"
 
 Renderer::Renderer(GLFWwindow* window, const World& world, const Camera& camera)
     :
