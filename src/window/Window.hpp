@@ -7,23 +7,24 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include "gui/Gui.hpp"
 
 class Window
 {
 private:
     GLFWwindow* window;
-    ImGuiContext* imguiContext;
+    Gui* gui;
 
     int width;
     int height;
     const char* title;
 
 public:
-    Window(int width, int height, const char* title);
+    Window() = default;
+    bool initialize(int width, int height, const char* title);
     ~Window();
+    void shutdown();
 
-    bool initialize();
     void update();
     void render();
-    void shutdown();
 };

@@ -1,18 +1,11 @@
 #include <iostream>
 
-#include "window/Window.hpp"
+#include "App.hpp"
 
 int main()
 {
-    Window window(800, 600, "GLFW + ImGui");
-
-    if (!window.initialize()) {
-        fprintf(stderr, "Failed to initialize the window\n");
-        return -1;
-    }
-
-    window.update();
-    window.shutdown();
+    App app;
+    app.run();
 
     return 0;
 }

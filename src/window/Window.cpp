@@ -4,6 +4,8 @@
 #include "scene/World.hpp"
 #include "scene/Camera.hpp"
 
+#include "gui/Gui.hpp"
+
 bool leftMouseButtonPressed = false;
 bool newMove = false;
 float lastX = 400, lastY = 300;
@@ -29,19 +31,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void charCallback(GLFWwindow* window, unsigned int c);
 
 
-Window::Window(int width, int height, const char* title)
-    :
-    width(width),
-    height(height),
-    title(title)
-{}
-
-Window::~Window()
-{
-    shutdown();
-}
-
-bool Window::initialize()
+bool Window::initialize(int width, int height, const char* title)
 {
     if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
@@ -55,30 +45,29 @@ bool Window::initialize()
     window = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if (!window) {
         fprintf(stderr, "Failed to create GLFW window\n");
-        glfwTerminate();
+        shutdown();
         return false;
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
+    // glfwSwapInterval(1);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         fprintf(stderr, "Failed to initialize OpenGL loader\n");
-        glfwTerminate();
+        shutdown();
         return false;
     }
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    imguiContext = ImGui::GetCurrentContext();
-
-    ImGui::StyleColorsDark();
-
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
+    gui->initialize(window);
 
     return true;
+}
+
+
+Window::~Window()
+{
+    shutdown();
 }
 
 
@@ -97,39 +86,18 @@ void Window::update()
     glfwSetCharCallback(window, charCallback);
 
 
-    Renderer renderer(window, World(), camera);
+    Renderer renderer(window, Scene(World(), camera));
 
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-        ImGui::SetNextWindowCollapsed(true, ImGuiCond_FirstUseEver);
-        ImGui::Begin("Settings", NULL, ImGuiWindowFlags_AlwaysAutoResize);
-
-        ImGui::Text("Use the following controls to manipulate the renderer:");
-        ImGui::BulletText("Left Mouse Button: Rotate camera");
-        ImGui::BulletText("Scroll Wheel: Zoom in/out");
-        
-        ImGui::Spacing();
-        ImGui::ColorEdit3("Background Color", (float*)&clearColor);
-
-        ImGui::Spacing();
-        ImGui::SliderFloat("Mouse Sensitivity", &mouseSensitivity, 0.01f, 1.0f);
-
-        ImGui::End();
 
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderer.render();
 
-         ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        gui->render();
 
         glfwSwapBuffers(window);
 
@@ -140,16 +108,13 @@ void Window::update()
 
 void Window::shutdown()
 {
-    if (ImGui::GetCurrentContext() != nullptr) {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-    }
+    gui->shutdown();
 
     if (window) {
         glfwDestroyWindow(window);
         window = nullptr;
     }
+
     glfwTerminate();
 }
 

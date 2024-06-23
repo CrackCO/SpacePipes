@@ -11,12 +11,13 @@ add_subdirectory(external/imgui ${CMAKE_CURRENT_BINARY_DIR}/imgui)
 
 
 set(SP_SRC 
+    src/App.cpp
     src/main.cpp
+    src/scene/Scene.cpp
     src/scene/World.cpp
     src/scene/Camera.cpp
-
     src/window/Window.cpp
-    
+    src/window/gui/Gui.cpp
     src/renderer/Renderer.cpp
     src/renderer/shader/Shader.cpp
     src/renderer/shader/src/vertShader.cpp

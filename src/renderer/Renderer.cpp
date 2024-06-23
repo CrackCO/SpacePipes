@@ -2,13 +2,12 @@
 
 #include "shader/Shader.hpp"
 
-Renderer::Renderer(GLFWwindow* window, const World& world, const Camera& camera)
+Renderer::Renderer(GLFWwindow* window, const Scene& scene)
     :
     window(window),
     VAO(0), VBO(0), EBO(0),
     shader(),
-    world(world),
-    camera(camera)
+    scene(scene)
 {
     shader.compile();
     initMesh();
@@ -74,10 +73,10 @@ void Renderer::render() {
 
     shader.bind();
 
-    shader.setVec3( "cameraPos",        camera.getPos              ());
-    shader.setVec3( "cameraDir",        camera.getDir              ());
-    shader.setMat4( "viewMatrix",       camera.getViewMatrix       ());
-    shader.setMat4( "projectionMatrix", camera.getProjectionMatrix ());
+    shader.setVec3( "cameraPos",        scene.getCamera().getPos              ());
+    shader.setVec3( "cameraDir",        scene.getCamera().getDir              ());
+    shader.setMat4( "viewMatrix",       scene.getCamera().getViewMatrix       ());
+    shader.setMat4( "projectionMatrix", scene.getCamera().getProjectionMatrix ());
     shader.setFloat("time", 0.0f); //glfwGetTime() / 16.0f);
 
     glBindVertexArray(VAO);

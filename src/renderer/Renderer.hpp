@@ -3,21 +3,21 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "scene/World.hpp"
-#include "scene/Camera.hpp"
 #include "shader/Shader.hpp"
+
+#include "scene/Scene.hpp"
 
 class Renderer {
 private:
     GLFWwindow* window;
+
     GLuint VAO, VBO, EBO;
     Shader shader;
 
-    const World& world;
-    const Camera& camera;
+    const Scene& scene;
 
 public:
-    Renderer(GLFWwindow* window, const World& world, const Camera& camera);
+    Renderer(GLFWwindow* window, const Scene& scene);
     ~Renderer();
 
 private:
@@ -26,5 +26,4 @@ private:
 
 public:
     void render();
-
 };
