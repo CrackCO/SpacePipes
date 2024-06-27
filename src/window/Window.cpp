@@ -64,7 +64,7 @@ Window::~Window()
 { Shutdown(); }
 
 
-void Window::StartAppLoop()
+void Window::Run()
 {
     /* for skeletal render  */
     glDisable(GL_DEPTH_TEST);

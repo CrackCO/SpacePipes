@@ -18,7 +18,7 @@ public:
     Window(int width, int height, const char* title);
 
     void Shutdown();
-    void StartAppLoop();
+    void Run();
     // void render();
     bool IsReady() const;
 
