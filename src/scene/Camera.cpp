@@ -8,36 +8,38 @@ Camera::Camera(
     const glm::vec3& target, float dist, float yaw, float pitch,
     float fov, float aspect, float nearPlane, float farPlane
 )
-    :
-    target ( target ),
-    dist   ( dist   ),
-    yaw    ( yaw    ),
-    pitch  ( pitch  ),
-
-    fov       ( fov       ),
-    aspect    ( aspect    ),
-    nearPlane ( nearPlane ),
-    farPlane  ( farPlane  ) 
+    : target(target),
+    dist(dist),
+    yaw(yaw),
+    pitch(pitch),
+    fov(fov),
+    aspect(aspect),
+    nearPlane(nearPlane),
+    farPlane(farPlane)
 
 {
-    updatePosition         ();
-    updateViewMatrix       ();
-    updateProjectionMatrix ();
+    UpdatePosition();
+    UpdateViewMatrix();
+    UpdateProjectionMatrix();
 }
 
-Camera::~Camera() {}
-
-
 /* View model */
-glm::vec3 Camera::getPos    () const { return pos;    }
-glm::vec3 Camera::getTarget () const { return target; }
-glm::vec3 Camera::getUp     () const { return up;     }
+glm::vec3 Camera::GetPos() const
+{ return pos; }
 
-glm::vec3 Camera::getDir () const { return glm::normalize(target - pos); }
+glm::vec3 Camera::GetTarget() const
+{ return target; }
 
-glm::mat4 Camera::getViewMatrix () const { return viewMatrix; }
+glm::vec3 Camera::GetUp() const
+{ return up; }
 
-void Camera::setTarget(const glm::vec3& newTarget)
+glm::vec3 Camera::GetDir() const
+{ return glm::normalize(target - pos); }
+
+glm::mat4 Camera::GetViewMatrix() const
+{ return viewMatrix; }
+
+void Camera::SetTarget(const glm::vec3& newTarget)
 {
     glm::vec3 newDir = newTarget - pos;
     dist = glm::length(newDir);
@@ -47,46 +49,88 @@ void Camera::setTarget(const glm::vec3& newTarget)
 
     target = newTarget;
 
-    updatePosition();
+    UpdatePosition();
 }
 
-void Camera::updateViewMatrix()
-{
-    viewMatrix = glm::lookAt(pos, target, up);
-}
+void Camera::UpdateViewMatrix()
+{ viewMatrix = glm::lookAt(pos, target, up); }
 
 
 /* Projection model */
-float Camera::getFov       () const { return fov;       }
-float Camera::getAspect    () const { return aspect;    }
-float Camera::getNearPlane () const { return nearPlane; }
-float Camera::getFarPlane  () const { return farPlane;  }
+float Camera::GetFov() const
+{ return fov; }
 
-glm::mat4 Camera::getProjectionMatrix () const { return projectionMatrix; }
+float Camera::GetAspect() const
+{ return aspect; }
+
+float Camera::GetNearPlane() const
+{ return nearPlane; }
+
+float Camera::GetFarPlane() const
+{ return farPlane;  }
+
+glm::mat4 Camera::GetProjectionMatrix() const
+{ return projectionMatrix; }
 
 
-void Camera::setFov       ( float newFov       ) { fov       = newFov;       updateProjectionMatrix(); }
-void Camera::setAspect    ( float newAspect    ) { aspect    = newAspect;    updateProjectionMatrix(); }
-void Camera::setNearPlane ( float newNearPlane ) { nearPlane = newNearPlane; updateProjectionMatrix(); }
-void Camera::setFarPlane  ( float newFarPlane  ) { farPlane  = newFarPlane;  updateProjectionMatrix(); }
-
-void Camera::updateProjectionMatrix()
+void Camera::SetFov(float newFov)
 {
-    projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
+    fov = newFov;
+    UpdateProjectionMatrix();
 }
+
+void Camera::SetAspect(float newAspect)
+{
+    aspect = newAspect;
+    UpdateProjectionMatrix();
+}
+
+void Camera::SetNearPlane(float newNearPlane)
+{
+    nearPlane = newNearPlane;
+    UpdateProjectionMatrix();
+}
+
+void Camera::SetFarPlane(float newFarPlane)
+{
+    farPlane  = newFarPlane;
+    UpdateProjectionMatrix();
+}
+
+void Camera::UpdateProjectionMatrix()
+{ projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane); }
 
 
 /* Rotation model */
-float Camera::getDist  () const { return dist;  }
-float Camera::getYaw   () const { return yaw;   }
-float Camera::getPitch () const { return pitch; }
+float Camera::GetDist() const
+{ return dist;  }
+
+float Camera::GetYaw() const
+{ return yaw;   }
+
+float Camera::GetPitch() const
+{ return pitch; }
 
 
-void Camera::setDist  ( float newDist  ) { dist  = newDist;  updatePosition(); }
-void Camera::setYaw   ( float newYaw   ) { yaw   = newYaw;   updatePosition(); }
-void Camera::setPitch ( float newPitch ) { pitch = newPitch; updatePosition(); }
+void Camera::SetDist(float newDist)
+{
+    dist = newDist;
+    UpdatePosition();
+}
 
-void Camera::updatePosition()
+void Camera::SetYaw(float newYaw)
+{
+    yaw = newYaw;
+    UpdatePosition();
+}
+
+void Camera::SetPitch(float newPitch)
+{
+    pitch = newPitch;
+    UpdatePosition();
+}
+
+void Camera::UpdatePosition()
 {
     pos.x = target.x + dist * cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     pos.y = target.y + dist * sin(glm::radians(pitch));
@@ -96,5 +140,5 @@ void Camera::updatePosition()
     glm::vec3 right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
     up = glm::normalize(glm::cross(right, front));
 
-    updateViewMatrix();
+    UpdateViewMatrix();
 }

@@ -11,7 +11,7 @@ add_subdirectory(external/imgui ${CMAKE_CURRENT_BINARY_DIR}/imgui)
 
 
 set(SP_SRC 
-    src/App.cpp
+    src/app/App.cpp
     src/main.cpp
     src/scene/Scene.cpp
     src/scene/World.cpp
@@ -27,7 +27,7 @@ set(SP_SRC
 add_executable(${CMAKE_PROJECT_NAME} ${SP_SRC})
 
 target_include_directories(${CMAKE_PROJECT_NAME} 
-    PRIVATE src
+    PRIVATE src/
     PRIVATE external/glad/include
     PRIVATE external/glfw/include
     PRIVATE external/imgui
@@ -39,11 +39,14 @@ if (WIN32)
         PRIVATE opengl32
         PRIVATE glu32
     )
+
+    add_compile_definitions(SP_WINDOWS_USED)
 elseif (UNIX)
     set(OPENGL_LIBRARIES 
         PRIVATE GL
         PRIVATE GLU
     )
+    add_compile_definitions(SP_LINUX_USED)
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} 

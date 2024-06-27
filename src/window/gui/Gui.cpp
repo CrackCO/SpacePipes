@@ -1,6 +1,6 @@
 #include "Gui.hpp"
 
-bool Gui::initialize(GLFWwindow* window)
+bool Gui::Initialize(GLFWwindow* window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -13,12 +13,8 @@ bool Gui::initialize(GLFWwindow* window)
     return true;
 }
 
-Gui::~Gui()
-{
-    shutdown();
-}
 
-void Gui::shutdown()
+void Gui::Shutdown()
 {
     if (ImGui::GetCurrentContext() != nullptr) {
         ImGui_ImplOpenGL3_Shutdown();
@@ -27,7 +23,7 @@ void Gui::shutdown()
     }
 }
 
-void Gui::render()
+void Gui::Render()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -56,3 +52,7 @@ void Gui::render()
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+
+Gui::~Gui()
+{ Shutdown(); }

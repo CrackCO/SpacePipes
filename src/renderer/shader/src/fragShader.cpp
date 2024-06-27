@@ -1,6 +1,6 @@
 #include "renderer/shader/Shader.hpp"
 
-const char* Shader::fragSrc = R"(
+std::string Shader::fragSrc = R"(
     #version 330 core
 
     out vec4 FragColor;

@@ -2,68 +2,69 @@
 
 #include <glm/glm.hpp>
 
+#include <app/Definitions.hpp>
+
+
 class Camera {
-private:
-    glm::vec3 pos;
-    glm::vec3 target;
-    glm::vec3 up;
-    glm::mat4 viewMatrix;
-
-    float fov;
-    float aspect;
-    float nearPlane;
-    float farPlane;
-    glm::mat4 projectionMatrix;
-
-    float dist;  /* distance to target            */
-    float yaw;   /* rotation angle around y axis  */
-    float pitch; /* rotation angle around x axis  */
-
 public:
     Camera(
         const glm::vec3& target, float dist, float yaw, float pitch,
         float fov, float aspect, float nearPlane, float farPlane
     );
 
-    ~Camera();
-
     /* View model */
-    glm::vec3 getPos    () const;
-    glm::vec3 getTarget () const;
-    glm::vec3 getUp     () const;
-    glm::vec3 getDir    () const;
+    SP_NODISCARD glm::vec3 GetPos() const;
+    SP_NODISCARD glm::vec3 GetTarget() const;
+    SP_NODISCARD glm::vec3 GetUp() const;
+    SP_NODISCARD glm::vec3 GetDir() const;
+    SP_NODISCARD glm::mat4 GetViewMatrix() const;
 
-    glm::mat4 getViewMatrix () const;
+    void SetTarget(const glm::vec3& newTarget);
 
-    void setTarget (const glm::vec3& newTarget);
-
-    void updateViewMatrix();
+    void UpdateViewMatrix();
 
 
     /* Projection model */
-    float     getFov       () const;
-    float     getAspect    () const;
-    float     getNearPlane () const;
-    float     getFarPlane  () const;
+    SP_NODISCARD float GetFov() const;
+    SP_NODISCARD float GetAspect() const;
+    SP_NODISCARD float GetNearPlane() const;
+    SP_NODISCARD float GetFarPlane() const;
+    SP_NODISCARD glm::mat4 GetProjectionMatrix() const;
 
-    glm::mat4 getProjectionMatrix () const;
+    void SetFov(float newFov);
+    void SetAspect(float newAspect);
+    void SetNearPlane(float newNearPlane);
+    void SetFarPlane(float newFarPlane);
 
-    void setFov       ( float newFov       );
-    void setAspect    ( float newAspect    );
-    void setNearPlane ( float newNearPlane );
-    void setFarPlane  ( float newFarPlane  );
-
-    void updateProjectionMatrix();
+    void UpdateProjectionMatrix();
 
 
     /* Rotation model */
-    float getDist  () const;
-    float getYaw   () const;
-    float getPitch () const;
+    SP_NODISCARD float GetDist() const;
+    SP_NODISCARD float GetYaw() const;
+    SP_NODISCARD float GetPitch() const;
 
-    void setDist  ( float newDist  );
-    void setYaw   ( float newYaw   );
-    void setPitch ( float newPitch );
+    void SetDist(float newDist);
+    void SetYaw(float newYaw);
+    void SetPitch(float newPitch);
 
-    void updatePosition();
+    void UpdatePosition();
+
+    ~Camera() = default;
+
+private:
+    glm::vec3 pos;
+    glm::vec3 target;
+    glm::vec3 up;
+    glm::mat4 viewMatrix;
+
+    float fov = 0.0f;
+    float aspect = 0.0f;
+    float nearPlane = 0.0f;
+    float farPlane = 0.0f;
+    glm::mat4 projectionMatrix;
+
+    float dist = 0.0f;  /* distance to target */
+    float yaw = 0.0f;   /* rotation angle around y axis */
+    float pitch = 0.0f; /* rotation angle around x axis */
 };

@@ -24,18 +24,12 @@ Camera camera(
     100.0f
 );
 
-void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void charCallback(GLFWwindow* window, unsigned int c);
 
-
-bool Window::initialize(int width, int height, const char* title)
+Window::Window(int width, int height, const char* title)
 {
     if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
-        return false;
+        return;
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -45,8 +39,8 @@ bool Window::initialize(int width, int height, const char* title)
     window = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if (!window) {
         fprintf(stderr, "Failed to create GLFW window\n");
-        shutdown();
-        return false;
+        Shutdown();
+        return;
     }
 
     glfwMakeContextCurrent(window);
@@ -55,35 +49,27 @@ bool Window::initialize(int width, int height, const char* title)
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         fprintf(stderr, "Failed to initialize OpenGL loader\n");
-        shutdown();
-        return false;
+        Shutdown();
+        return;
     }
 
-    gui->initialize(window);
+    gui = std::make_unique<Gui>();
+    gui->Initialize(window);
 
-    return true;
+    SetCallbacks();
 }
 
 
 Window::~Window()
-{
-    shutdown();
-}
+{ Shutdown(); }
 
 
-void Window::update()
+void Window::StartAppLoop()
 {
     /* for skeletal render  */
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
-    glfwSetCursorPosCallback(window, cursorPosCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetScrollCallback(window, scrollCallback);
-    glfwSetKeyCallback(window, keyCallback);
-    glfwSetCharCallback(window, charCallback);
 
 
     Renderer renderer(window, Scene(World(), camera));
@@ -95,20 +81,18 @@ void Window::update()
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer.render();
+        renderer.Render();
 
-        gui->render();
+        gui->Render();
 
         glfwSwapBuffers(window);
-
-        /* for camera rotation */
-        // camera.setYaw(glfwGetTime() * 10.0f);
     }
 }
 
-void Window::shutdown()
+void Window::Shutdown()
 {
-    gui->shutdown();
+    gui->Shutdown();
+    gui = nullptr;
 
     if (window) {
         glfwDestroyWindow(window);
@@ -118,6 +102,36 @@ void Window::shutdown()
     glfwTerminate();
 }
 
+bool Window::IsReady() const
+{ return (window != nullptr) && (gui != nullptr); }
+
+
+void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+
+
+void Window::SetCallbacks()
+{
+    glfwSetCursorPosCallback(window, cursorPosCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetScrollCallback(window, scrollCallback);
+
+    glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+    });
+
+
+    glfwSetCharCallback(window, [](GLFWwindow* window, unsigned int c) {
+        ImGui_ImplGlfw_CharCallback(window, c);
+    });
+}
+
+
+// -------------- GLFW callbacks --------------
 void cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
     ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
@@ -135,15 +149,15 @@ void cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
         lastX = xpos;
         lastY = ypos;
 
-        
+
         xoffset *= mouseSensitivity;
         yoffset *= mouseSensitivity;
 
-        camera.setYaw(camera.getYaw() + xoffset);
-        camera.setPitch(camera.getPitch() + yoffset);
+        camera.SetYaw(camera.GetYaw() + xoffset);
+        camera.SetPitch(camera.GetPitch() + yoffset);
 
-        if (camera.getPitch() > 89.0f) camera.setPitch(89.0f);
-        if (camera.getPitch() < -89.0f) camera.setPitch(-89.0f);
+        if (camera.GetPitch() > 89.0f) camera.SetPitch(89.0f);
+        if (camera.GetPitch() < -89.0f) camera.SetPitch(-89.0f);
     }
 }
 
@@ -165,19 +179,8 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
     ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 
-    camera.setDist(camera.getDist() - yoffset * mouseSensitivity);
-    
-    if (camera.getDist() < 2.0f) camera.setDist(2.0f);
-    if (camera.getDist() > 20.0f) camera.setDist(20.0f);
-}
+    camera.SetDist(camera.GetDist() - yoffset * mouseSensitivity);
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
-
-void charCallback(GLFWwindow* window, unsigned int c) {
-    ImGui_ImplGlfw_CharCallback(window, c);
+    if (camera.GetDist() < 2.0f) camera.SetDist(2.0f);
+    if (camera.GetDist() > 20.0f) camera.SetDist(20.0f);
 }

@@ -1,0 +1,1 @@
+#define SP_NODISCARD    [[nodiscard]]

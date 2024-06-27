@@ -1,10 +1,6 @@
 #include "World.hpp"
 
-World::World() {}
-
-World::~World() {}
-
-std::vector<glm::vec3> World::getVertices() const {
+std::vector<glm::vec3> World::GetVertices() const {
     std::vector<glm::vec3> vertices = {
         glm::vec3(-0.732f, 1.293f, 0.146f),
         glm::vec3(-0.605f, 1.122f, 0.439f),

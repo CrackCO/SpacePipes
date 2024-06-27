@@ -1,6 +1,6 @@
 #include "Renderer.hpp"
-
 #include "shader/Shader.hpp"
+
 
 Renderer::Renderer(GLFWwindow* window, const Scene& scene)
     :
@@ -9,17 +9,12 @@ Renderer::Renderer(GLFWwindow* window, const Scene& scene)
     shader(),
     scene(scene)
 {
-    shader.compile();
-    initMesh();
-}
-
-Renderer::~Renderer()
-{
-    cleanup();
+    shader.Compile();
+    InitMesh();
 }
 
 
-void Renderer::initMesh() {
+void Renderer::InitMesh() {
     GLfloat vertices[] = {
         -0.5f, -0.5f,  0.5f, 
          0.5f, -0.5f,  0.5f, 
@@ -68,25 +63,28 @@ void Renderer::initMesh() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Renderer::render() {
+void Renderer::Render() {
     glfwPollEvents();
 
-    shader.bind();
+    shader.Bind();
 
-    shader.setVec3( "cameraPos",        scene.getCamera().getPos              ());
-    shader.setVec3( "cameraDir",        scene.getCamera().getDir              ());
-    shader.setMat4( "viewMatrix",       scene.getCamera().getViewMatrix       ());
-    shader.setMat4( "projectionMatrix", scene.getCamera().getProjectionMatrix ());
-    shader.setFloat("time", 0.0f); //glfwGetTime() / 16.0f);
+    shader.SetVec3( "cameraPos", scene.GetCamera().GetPos());
+    shader.SetVec3( "cameraDir", scene.GetCamera().GetDir());
+    shader.SetMat4( "viewMatrix", scene.GetCamera().GetViewMatrix());
+    shader.SetMat4( "projectionMatrix", scene.GetCamera().GetProjectionMatrix());
+    shader.SetFloat("time", 0.0f); //glfwGetTime() / 16.0f);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
-void Renderer::cleanup() {
+void Renderer::Cleanup() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glfwDestroyWindow(window);
     glfwTerminate();
 }
+
+Renderer::~Renderer()
+{ Cleanup(); }

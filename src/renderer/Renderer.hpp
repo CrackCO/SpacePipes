@@ -2,28 +2,32 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <limits>
 
+#include <scene/Scene.hpp>
 #include "shader/Shader.hpp"
 
-#include "scene/Scene.hpp"
 
 class Renderer {
-private:
-    GLFWwindow* window;
-
-    GLuint VAO, VBO, EBO;
-    Shader shader;
-
-    const Scene& scene;
-
 public:
     Renderer(GLFWwindow* window, const Scene& scene);
+
+    void Render();
+
     ~Renderer();
 
 private:
-    void initMesh();
-    void cleanup();
+    void InitMesh();
+    void Cleanup();
 
-public:
-    void render();
+private:
+    GLFWwindow* window = nullptr;
+
+    /* OpenGL cannot generate buffer with index 0 */
+    GLuint VAO = 0;
+    GLuint VBO = 0;
+    GLuint EBO = 0;
+    Shader shader;
+
+    const Scene& scene;
 };

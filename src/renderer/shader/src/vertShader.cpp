@@ -1,6 +1,6 @@
 #include "renderer/shader/Shader.hpp"
 
-const char* Shader::vertSrc = R"(
+std::string Shader::vertSrc = R"(
     #version 330 core
 
     in vec3 position;

@@ -1,11 +1,9 @@
-#include <iostream>
-
-#include "App.hpp"
+#include "app/App.hpp"
 
 int main()
 {
     App app;
-    app.run();
+    app.Run();
 
     return 0;
 }
