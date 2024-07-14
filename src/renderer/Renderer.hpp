@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <limits>
 
@@ -17,16 +18,12 @@ public:
     ~Renderer();
 
 private:
-    void InitMesh();
     void Cleanup();
 
 private:
     GLFWwindow* window = nullptr;
 
     /* OpenGL cannot generate buffer with index 0 */
-    GLuint VAO = 0;
-    GLuint VBO = 0;
-    GLuint EBO = 0;
     Shader shader;
 
     const Scene& scene;

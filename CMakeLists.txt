@@ -16,6 +16,9 @@ set(SP_SRC
     src/scene/Scene.cpp
     src/scene/World.cpp
     src/scene/Camera.cpp
+    src/scene/Mesh.cpp
+    src/scene/Pipe.cpp
+    src/scene/PipeGenerator.cpp
     src/window/Window.cpp
     src/window/gui/Gui.cpp
     src/renderer/Renderer.cpp

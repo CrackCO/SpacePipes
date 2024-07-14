@@ -12,6 +12,6 @@ void App::Run()
         return;
     }
 
-    window.StartAppLoop();
+    window.Run();
     window.Shutdown();
 }

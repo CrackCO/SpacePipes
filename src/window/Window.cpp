@@ -14,15 +14,15 @@ glm::vec4 clearColor = glm::vec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 Camera camera(
     glm::vec3(0.0f, 0.0f, 0.0f), 
-    4.0f, 
-    45.0f, 
-    45.0f,
+        4.0f, 
+        45.0f, 
+        45.0f,
 
-    45.0f, 
-    800.0f / 600.0f, 
-    0.1f, 
-    100.0f
-);
+        45.0f, 
+        800.0f / 600.0f, 
+        0.1f, 
+        100.0f
+    );
 
 
 Window::Window(int width, int height, const char* title)
@@ -131,7 +131,7 @@ void Window::SetCallbacks()
 }
 
 
-// -------------- GLFW callbacks --------------
+/* ---------------- GLFW callbacks ---------------- */
 void cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
     ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);

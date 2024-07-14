@@ -7,14 +7,9 @@
 
 class Scene {
 public:
-    Scene(const World& world, const Camera& camera);
-
-    SP_NODISCARD const World& GetWorld() const;
-    SP_NODISCARD const Camera& GetCamera() const;
-
+    Scene(const World& world, Camera& camera);
     ~Scene() = default;
 
-private:
     const World& world;
-    const Camera& camera;
+    Camera& camera;
 };
